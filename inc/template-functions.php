@@ -113,43 +113,14 @@ function blumeandbare_header_cart_link() {
 }
 
 /**
- * Fallback primary menu matching the Figma header.
+ * Fallback menu when no menu is assigned to Primary Header.
  */
 function blumeandbare_primary_menu_fallback() {
-	$shop_url = blumeandbare_shop_url();
-	$blog_id  = (int) get_option( 'page_for_posts' );
-	$blog_url = $blog_id ? get_permalink( $blog_id ) : home_url( '/blog/' );
-
-	$items = array(
-		array(
-			'title' => __( 'Shop', 'blumeandbare' ),
-			'url'   => $shop_url,
-		),
-		array(
-			'title' => __( 'Categories', 'blumeandbare' ),
-			'url'   => $shop_url,
-		),
-		array(
-			'title' => __( 'About', 'blumeandbare' ),
-			'url'   => home_url( '/about/' ),
-		),
-		array(
-			'title' => __( 'Blog', 'blumeandbare' ),
-			'url'   => $blog_url,
-		),
-		array(
-			'title' => __( 'Contact', 'blumeandbare' ),
-			'url'   => home_url( '/contact/' ),
-		),
-	);
-
 	echo '<ul id="primary-menu" class="menu nav-menu">';
-	foreach ( $items as $item ) {
-		printf(
-			'<li class="menu-item"><a href="%s">%s</a></li>',
-			esc_url( $item['url'] ),
-			esc_html( $item['title'] )
-		);
-	}
+	wp_list_pages(
+		array(
+			'title_li' => '',
+		)
+	);
 	echo '</ul>';
 }

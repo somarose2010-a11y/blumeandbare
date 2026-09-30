@@ -123,12 +123,15 @@ a {
 }
 
 .site-header .main-navigation ul {
-	display: flex;
-	align-items: center;
-	gap: 28px;
 	margin: 0;
 	padding: 0;
 	list-style: none;
+}
+
+.site-header .main-navigation > ul {
+	display: flex;
+	align-items: center;
+	gap: 28px;
 }
 
 .site-header .main-navigation li {
@@ -157,11 +160,16 @@ a {
 }
 
 .site-header .main-navigation ul ul {
+	display: block;
 	top: calc(100% + 10px);
 	padding: 10px 0;
 	background: var(--bb-cream-soft);
 	border: 1px solid var(--bb-line);
 	box-shadow: 0 8px 24px rgba(59, 49, 40, 0.08);
+}
+
+.site-header .main-navigation .menu-item-has-children > a {
+	padding-right: 2px;
 }
 
 .site-header .main-navigation ul ul a {
@@ -292,7 +300,7 @@ a {
 
 /* Hero banner
 --------------------------------------------- */
-.hero-banner {
+/* .hero-banner {
 	background: var(--bb-cream);
 }
 
@@ -405,7 +413,7 @@ a {
 	aspect-ratio: 1 / 1;
 	object-fit: cover;
 	object-position: center 62%;
-}
+} */
 
 .site-main--home {
 	margin: 0;
@@ -498,6 +506,21 @@ a {
 		display: flex;
 	}
 
+	.site-header .main-navigation.toggled ul ul {
+		position: static;
+		left: auto;
+		float: none;
+		width: 100%;
+		border: 0;
+		box-shadow: none;
+		padding: 0 0 0 16px;
+		background: transparent;
+	}
+
+	.site-header .main-navigation.toggled ul ul a {
+		width: auto;
+	}
+
 	.site-header .main-navigation a {
 		display: block;
 		padding: 12px 0;
@@ -541,7 +564,7 @@ a {
 		display: none;
 	}
 
-	.site-header .main-navigation ul {
+	.site-header .main-navigation > ul {
 		display: flex;
 	}
 }

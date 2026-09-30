@@ -49,7 +49,7 @@ function blumeandbare_setup() {
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus(
 		array(
-			'menu-1' => esc_html__( 'Primary', 'blumeandbare' ),
+			'menu-1' => esc_html__( 'Primary Header', 'blumeandbare' ),
 		)
 	);
 
@@ -84,6 +84,7 @@ function blumeandbare_setup() {
 
 	// Add theme support for selective refresh for widgets.
 	add_theme_support( 'customize-selective-refresh-widgets' );
+	add_theme_support( 'align-wide' );
 
 	/**
 	 * Add support for core custom logo.
@@ -194,11 +195,6 @@ function blumeandbare_resource_hints( $urls, $relation_type ) {
 	return $urls;
 }
 add_filter( 'wp_resource_hints', 'blumeandbare_resource_hints', 10, 2 );
-
-/**
- * Implement the Custom Header feature.
- */
-require get_template_directory() . '/inc/custom-header.php';
 
 /**
  * Custom template tags for this theme.
