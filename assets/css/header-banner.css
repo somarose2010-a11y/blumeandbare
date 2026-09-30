@@ -10,13 +10,13 @@
 	--bb-ink-soft: #6b5e52;
 	--bb-brown: #8a6249;
 	--bb-brown-hover: #734e38;
-	--bb-line: #e4d5c5;
+	--bb-line: #E9E2D8;
 	--bb-white: #fbf7f2;
 	--bb-header-y: 20px;
 	--bb-gutter: 80px;
 	--bb-max: 1440px;
-	--font-serif: "Cormorant Garamond", "Times New Roman", serif;
-	--font-sans: "Outfit", "Helvetica Neue", Arial, sans-serif;
+	--font-body: "Inter", sans-serif;
+	--font-heading: "Playfair Display", serif;
 }
 
 body,
@@ -26,11 +26,7 @@ select,
 optgroup,
 textarea {
 	color: var(--bb-ink);
-	font-family: var(--font-sans);
-}
-
-body {
-	background: var(--bb-cream);
+	font-family: var(--font-body);
 }
 
 h1,
@@ -39,7 +35,7 @@ h3,
 h4,
 h5,
 h6 {
-	font-family: var(--font-serif);
+	font-family: var(--font-heading);
 	font-weight: 400;
 	color: var(--bb-ink);
 }
@@ -47,16 +43,10 @@ h6 {
 a {
 	color: var(--bb-ink);
 }
-
-#page.site {
-	background: var(--bb-cream);
-}
-
 /* Header
 --------------------------------------------- */
 .site-header {
 	position: relative;
-	background: var(--bb-cream);
 	border-bottom: 1px solid var(--bb-line);
 	z-index: 30;
 }
@@ -143,9 +133,8 @@ a {
 	display: inline-block;
 	padding: 4px 0;
 	color: var(--bb-ink-soft);
-	font-family: var(--font-sans);
 	font-size: 0.875rem;
-	font-weight: 400;
+	font-weight: 500;
 	letter-spacing: 0.03em;
 	line-height: 1.2;
 	text-decoration: none;
