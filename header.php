@@ -2,8 +2,6 @@
 /**
  * The header for our theme
  *
- * This is the template that displays all of the <head> section and everything up until <div id="content">
- *
  * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
  *
  * @package BlumeAndBare
@@ -26,34 +24,59 @@
 	<a class="skip-link screen-reader-text" href="#primary"><?php esc_html_e( 'Skip to content', 'blumeandbare' ); ?></a>
 
 	<header id="masthead" class="site-header">
-		<div class="site-branding">
-			<?php
-			the_custom_logo();
-			if ( is_front_page() && is_home() ) :
-				?>
-				<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-				<?php
-			else :
-				?>
-				<p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
-				<?php
-			endif;
-			$blumeandbare_description = get_bloginfo( 'description', 'display' );
-			if ( $blumeandbare_description || is_customize_preview() ) :
-				?>
-				<p class="site-description"><?php echo $blumeandbare_description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
-			<?php endif; ?>
-		</div><!-- .site-branding -->
+		<div class="site-header__inner">
+			<div class="site-branding">
+				<?php if ( has_custom_logo() ) : ?>
+					<?php the_custom_logo(); ?>
+				<?php else : ?>
+					<p class="site-title">
+						<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
+							<?php echo esc_html__( 'Blume', 'blumeandbare' ); ?> <span class="amp">&amp;</span> <?php echo esc_html__( 'Bare', 'blumeandbare' ); ?>
+						</a>
+					</p>
+				<?php endif; ?>
+			</div>
 
-		<nav id="site-navigation" class="main-navigation">
-			<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e( 'Primary Menu', 'blumeandbare' ); ?></button>
-			<?php
-			wp_nav_menu(
-				array(
-					'theme_location' => 'menu-1',
-					'menu_id'        => 'primary-menu',
-				)
-			);
-			?>
-		</nav><!-- #site-navigation -->
-	</header><!-- #masthead -->
+			<nav id="site-navigation" class="main-navigation" aria-label="<?php esc_attr_e( 'Primary', 'blumeandbare' ); ?>">
+				<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">
+					<span class="screen-reader-text"><?php esc_html_e( 'Menu', 'blumeandbare' ); ?></span>
+					<?php echo blumeandbare_icon( 'menu' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</button>
+				<?php
+				wp_nav_menu(
+					array(
+						'theme_location' => 'menu-1',
+						'menu_id'        => 'primary-menu',
+						'container'      => false,
+						'fallback_cb'    => 'blumeandbare_primary_menu_fallback',
+					)
+				);
+				?>
+			</nav>
+
+			<div class="header-actions">
+				<button class="header-action header-search-toggle" type="button" aria-expanded="false" aria-controls="header-search-panel">
+					<span class="screen-reader-text"><?php esc_html_e( 'Search', 'blumeandbare' ); ?></span>
+					<?php echo blumeandbare_icon( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</button>
+
+				<a class="header-action header-account-link" href="<?php echo esc_url( blumeandbare_account_url() ); ?>">
+					<span class="screen-reader-text"><?php esc_html_e( 'Account', 'blumeandbare' ); ?></span>
+					<?php echo blumeandbare_icon( 'user' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</a>
+
+				<?php blumeandbare_header_cart_link(); ?>
+			</div>
+		</div>
+
+		<div id="header-search-panel" class="header-search-panel">
+			<form class="header-search-form" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+				<label class="screen-reader-text" for="header-search-field"><?php esc_html_e( 'Search for:', 'blumeandbare' ); ?></label>
+				<input id="header-search-field" type="search" name="s" placeholder="<?php esc_attr_e( 'Search products…', 'blumeandbare' ); ?>" value="<?php echo esc_attr( get_search_query() ); ?>" />
+				<?php if ( class_exists( 'WooCommerce' ) ) : ?>
+					<input type="hidden" name="post_type" value="product" />
+				<?php endif; ?>
+				<button type="submit"><?php esc_html_e( 'Search', 'blumeandbare' ); ?></button>
+			</form>
+		</div>
+	</header>

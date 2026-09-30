@@ -35,3 +35,121 @@ function blumeandbare_pingback_header() {
 	}
 }
 add_action( 'wp_head', 'blumeandbare_pingback_header' );
+
+/**
+ * Shop URL helper.
+ *
+ * @return string
+ */
+function blumeandbare_shop_url() {
+	if ( function_exists( 'wc_get_page_permalink' ) ) {
+		return wc_get_page_permalink( 'shop' );
+	}
+
+	return home_url( '/shop/' );
+}
+
+/**
+ * Account URL helper.
+ *
+ * @return string
+ */
+function blumeandbare_account_url() {
+	if ( function_exists( 'wc_get_page_permalink' ) ) {
+		return wc_get_page_permalink( 'myaccount' );
+	}
+
+	return wp_login_url();
+}
+
+/**
+ * Cart URL helper.
+ *
+ * @return string
+ */
+function blumeandbare_cart_url() {
+	if ( function_exists( 'wc_get_cart_url' ) ) {
+		return wc_get_cart_url();
+	}
+
+	return home_url( '/cart/' );
+}
+
+/**
+ * Inline header icons.
+ *
+ * @param string $name Icon key.
+ * @return string
+ */
+function blumeandbare_icon( $name ) {
+	$icons = array(
+		'search' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.4-3.4"/></svg>',
+		'user'   => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="3.25"/><path d="M5.5 19.5c.8-3.4 3.6-5.25 6.5-5.25s5.7 1.85 6.5 5.25"/></svg>',
+		'bag'    => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 8.5h11l-1 12.5h-9l-1-12.5z"/><path d="M9 8.5V7.25A3 3 0 0 1 12 4.25a3 3 0 0 1 3 3V8.5"/></svg>',
+		'menu'   => '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+	);
+
+	return isset( $icons[ $name ] ) ? $icons[ $name ] : '';
+}
+
+/**
+ * Header cart link used by WooCommerce fragments.
+ */
+function blumeandbare_header_cart_link() {
+	$count = 0;
+
+	if ( function_exists( 'WC' ) && WC()->cart ) {
+		$count = (int) WC()->cart->get_cart_contents_count();
+	}
+	?>
+	<a class="header-action header-cart-link" href="<?php echo esc_url( blumeandbare_cart_url() ); ?>">
+		<span class="screen-reader-text"><?php esc_html_e( 'Cart', 'blumeandbare' ); ?></span>
+		<?php echo blumeandbare_icon( 'bag' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		<?php if ( $count > 0 ) : ?>
+			<span class="header-cart-count"><?php echo esc_html( (string) $count ); ?></span>
+		<?php endif; ?>
+	</a>
+	<?php
+}
+
+/**
+ * Fallback primary menu matching the Figma header.
+ */
+function blumeandbare_primary_menu_fallback() {
+	$shop_url = blumeandbare_shop_url();
+	$blog_id  = (int) get_option( 'page_for_posts' );
+	$blog_url = $blog_id ? get_permalink( $blog_id ) : home_url( '/blog/' );
+
+	$items = array(
+		array(
+			'title' => __( 'Shop', 'blumeandbare' ),
+			'url'   => $shop_url,
+		),
+		array(
+			'title' => __( 'Categories', 'blumeandbare' ),
+			'url'   => $shop_url,
+		),
+		array(
+			'title' => __( 'About', 'blumeandbare' ),
+			'url'   => home_url( '/about/' ),
+		),
+		array(
+			'title' => __( 'Blog', 'blumeandbare' ),
+			'url'   => $blog_url,
+		),
+		array(
+			'title' => __( 'Contact', 'blumeandbare' ),
+			'url'   => home_url( '/contact/' ),
+		),
+	);
+
+	echo '<ul id="primary-menu" class="menu nav-menu">';
+	foreach ( $items as $item ) {
+		printf(
+			'<li class="menu-item"><a href="%s">%s</a></li>',
+			esc_url( $item['url'] ),
+			esc_html( $item['title'] )
+		);
+	}
+	echo '</ul>';
+}

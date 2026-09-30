@@ -93,8 +93,8 @@ function blumeandbare_setup() {
 	add_theme_support(
 		'custom-logo',
 		array(
-			'height'      => 250,
-			'width'       => 250,
+			'height'      => 40,
+			'width'       => 180,
 			'flex-width'  => true,
 			'flex-height' => true,
 		)
@@ -138,16 +138,62 @@ add_action( 'widgets_init', 'blumeandbare_widgets_init' );
  * Enqueue scripts and styles.
  */
 function blumeandbare_scripts() {
-	wp_enqueue_style( 'blumeandbare-style', get_stylesheet_uri(), array(), _S_VERSION );
+	wp_enqueue_style(
+		'blumeandbare-fonts',
+		'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap',
+		array(),
+		null
+	);
+
+	wp_enqueue_style( 'blumeandbare-style', get_stylesheet_uri(), array( 'blumeandbare-fonts' ), _S_VERSION );
 	wp_style_add_data( 'blumeandbare-style', 'rtl', 'replace' );
 
+	$header_css_path = get_template_directory() . '/assets/css/header-banner.css';
+	wp_enqueue_style(
+		'blumeandbare-header-banner',
+		get_template_directory_uri() . '/assets/css/header-banner.css',
+		array( 'blumeandbare-style' ),
+		file_exists( $header_css_path ) ? (string) filemtime( $header_css_path ) : _S_VERSION
+	);
+
 	wp_enqueue_script( 'blumeandbare-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
+
+	$header_js_path = get_template_directory() . '/assets/js/header.js';
+	wp_enqueue_script(
+		'blumeandbare-header',
+		get_template_directory_uri() . '/assets/js/header.js',
+		array(),
+		file_exists( $header_js_path ) ? (string) filemtime( $header_js_path ) : _S_VERSION,
+		true
+	);
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'blumeandbare_scripts' );
+
+/**
+ * Prefetch Google Fonts origins.
+ *
+ * @param array  $urls          URLs to print for resource hints.
+ * @param string $relation_type The relation type the URLs are printed for.
+ * @return array
+ */
+function blumeandbare_resource_hints( $urls, $relation_type ) {
+	if ( 'preconnect' === $relation_type ) {
+		$urls[] = array(
+			'href' => 'https://fonts.googleapis.com',
+		);
+		$urls[] = array(
+			'href'        => 'https://fonts.gstatic.com',
+			'crossorigin' => 'anonymous',
+		);
+	}
+
+	return $urls;
+}
+add_filter( 'wp_resource_hints', 'blumeandbare_resource_hints', 10, 2 );
 
 /**
  * Implement the Custom Header feature.
@@ -174,5 +220,12 @@ require get_template_directory() . '/inc/customizer.php';
  */
 if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
+}
+
+/**
+ * Load WooCommerce compatibility file.
+ */
+if ( class_exists( 'WooCommerce' ) ) {
+	require get_template_directory() . '/inc/woocommerce.php';
 }
 
