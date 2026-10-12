@@ -225,3 +225,29 @@ if ( class_exists( 'WooCommerce' ) ) {
 	require get_template_directory() . '/inc/woocommerce.php';
 }
 
+/**
+ * Theme shortcodes.
+ */
+require get_template_directory() . '/inc/shortcodes.php';
+
+// Allow SVG uploads. WebP and GIF are already in WordPress core mime types
+// and are validated by wp_check_filetype_and_ext / wp_get_image_mime.
+function bb_allow_image_types( $mimes ) {
+	$mimes['svg'] = 'image/svg+xml';
+	return $mimes;
+}
+add_filter( 'upload_mimes', 'bb_allow_image_types' );
+
+// SVG is not a raster image, so core's image mime check often rejects it.
+function bb_fix_svg_check( $data, $file, $filename, $mimes ) {
+	$ext = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
+
+	if ( 'svg' === $ext ) {
+		$data['ext']  = 'svg';
+		$data['type'] = 'image/svg+xml';
+	}
+
+	return $data;
+}
+add_filter( 'wp_check_filetype_and_ext', 'bb_fix_svg_check', 10, 4 );
+
