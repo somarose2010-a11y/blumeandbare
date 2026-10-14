@@ -113,6 +113,34 @@ function blumeandbare_header_cart_link() {
 }
 
 /**
+ * Product star rating from WooCommerce reviews.
+ * Prints nothing when the product has no rating or comments yet.
+ *
+ * @param WC_Product $product Product.
+ */
+function blumeandbare_product_rating( $product ) {
+	if ( ! $product instanceof WC_Product ) {
+		return;
+	}
+
+	$rating = (float) $product->get_average_rating();
+	$count  = (int) $product->get_review_count();
+
+	if ( $rating <= 0 && $count < 1 ) {
+		return;
+	}
+
+	$filled = (int) round( $rating );
+	?>
+	<span class="bestseller-card__rating">
+		<?php for ( $i = 1; $i <= 5; $i++ ) : ?>
+			<span class="bestseller-card__star<?php echo $i <= $filled ? ' is-filled' : ''; ?>"></span>
+		<?php endfor; ?>
+	</span>
+	<?php
+}
+
+/**
  * Fallback menu when no menu is assigned to Primary Header.
  */
 function blumeandbare_primary_menu_fallback() {

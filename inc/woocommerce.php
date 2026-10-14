@@ -42,3 +42,20 @@ function blumeandbare_cart_link_fragment( $fragments ) {
 	return $fragments;
 }
 add_filter( 'woocommerce_add_to_cart_fragments', 'blumeandbare_cart_link_fragment' );
+
+add_filter( 'woocommerce_price_trim_zeros', '__return_true' );
+
+/**
+ * Load AJAX add-to-cart on pages that render the bestsellers grid.
+ */
+function blumeandbare_bestsellers_scripts() {
+	if ( ! function_exists( 'WC' ) ) {
+		return;
+	}
+
+	$post = get_post();
+	if ( is_front_page() || ( $post && has_shortcode( $post->post_content, 'bb_bestsellers' ) ) ) {
+		wp_enqueue_script( 'wc-add-to-cart' );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'blumeandbare_bestsellers_scripts' );
