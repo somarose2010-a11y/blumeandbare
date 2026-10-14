@@ -32,18 +32,17 @@ textarea {
 
 h1,
 h2,
-h3{
-	font-family: var(--font-heading);
-	font-weight: 400;
-	color: var(--bb-ink);
-}
-
-h1,
-h2,
 h3,
 h4,
 h5,
-h6, figure{
+h6 {
+	font-family: var(--font-heading);
+	font-weight: 400;
+	color: var(--bb-ink);
+	margin: 0;
+}
+
+figure {
 	margin: 0;
 }
 a {

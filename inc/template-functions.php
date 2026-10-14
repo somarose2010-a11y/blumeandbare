@@ -126,7 +126,7 @@ function blumeandbare_product_rating( $product ) {
 	$rating = (float) $product->get_average_rating();
 	$count  = (int) $product->get_review_count();
 
-	if ( $rating <= 0 && $count < 1 ) {
+	if ( $rating <= 0 || $count < 1 ) {
 		return;
 	}
 
